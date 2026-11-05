@@ -5,8 +5,7 @@
 	"loading": "Loading...",
 	"apply": "Apply",
 	"clearAll": "Clear all parameters",
-	"close": "Close",
-  "confirmApply": "Apply new filters",
-  "confirmClose": "Use old filters",
+	"confirmApply": "Apply new filters",
+	"confirmClose": "Use old filters",
 	"closeIcon": "X"
 }

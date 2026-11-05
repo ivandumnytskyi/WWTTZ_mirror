@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { FilterType } from '@/shared/api/types/Filter'
 import { FilterChoose } from '@/shared/api/types/Filter/FilterVariants'
+import type { SearchRequestFilter } from '@/shared/api/types/SearchRequest/SearchRequestFilter'
+import { useFilterStore } from '@/shared/store/useFilterStore'
 
 import Conformation from './Conformation'
 
@@ -15,9 +18,15 @@ const FilterModal = ({
 	isLoading: boolean
 }) => {
 	const { t } = useTranslation('filter')
+	const savedFilters = useFilterStore(state => state.savedFilters)
+	const setSavedFilters = useFilterStore(state => state.setSavedFilters)
 	const [selectedOptions, setSelectedOptions] = useState<{
 		[key: string]: boolean
-	}>({})
+	}>(() =>
+		Object.fromEntries(
+			savedFilters.flatMap(filter => filter.optionsIds.map(id => [id, true]))
+		)
+	)
 	const [isOpenConfirmation, setIsOpenConfirmation] = useState(false)
 
 	const handleCheckboxChange = (optionId: string) => {
@@ -27,10 +36,31 @@ const FilterModal = ({
 		}))
 	}
 
+	const buildRequest = (): SearchRequestFilter =>
+		(data ?? [])
+			.map(filter => ({
+				id: filter.id,
+				type: FilterType.OPTION as const,
+				optionsIds: filter.options
+					.filter(option => selectedOptions[option.id])
+					.map(option => option.id)
+			}))
+			.filter(filter => filter.optionsIds.length > 0)
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 		setIsOpenConfirmation(true)
-		console.log(selectedOptions)
+	}
+
+	const handleConfirm = () => {
+		setSavedFilters(buildRequest())
+		setIsOpenConfirmation(false)
+		onClose()
+	}
+
+	const handleCancel = () => {
+		setIsOpenConfirmation(false)
+		onClose()
 	}
 	return (
 		<>
@@ -103,7 +133,8 @@ const FilterModal = ({
 				{isOpenConfirmation && (
 					<Conformation
 						message={t('conformationMessage')}
-						onClose={() => setIsOpenConfirmation(false)}
+						onConfirm={handleConfirm}
+						onCancel={handleCancel}
 					/>
 				)}
 			</div>
