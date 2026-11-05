@@ -3,16 +3,25 @@ import { useTranslation } from 'react-i18next'
 const Conformation = ({
 	onConfirm,
 	onCancel,
+	onClose,
 	message
 }: {
 	onConfirm: () => void
 	onCancel: () => void
+	onClose: () => void
 	message: string
 }) => {
 	const { t } = useTranslation('filter')
 
 	return (
-		<div className="w-full h-full modal-backdrop bg-[rgba(27,27,27,0.3)] backdrop-blur-sm fixed inset-0 flex pt-25">
+		<div
+			className="absolute inset-0 z-30 flex justify-center rounded-2xl bg-[rgba(27,27,27,0.3)] backdrop-blur-sm pt-[180px]"
+			onClick={e => {
+				if (e.target === e.currentTarget) {
+					onClose()
+				}
+			}}
+		>
 			<div className="relative modal-content flex flex-col justify-between items-center bg-white p-6 rounded-2xl w-full h-74">
 				<p className="text-[40px] mb-4">{message}</p>
 				<div className="flex gap-8">
@@ -30,7 +39,7 @@ const Conformation = ({
 					</button>
 				</div>
 				<button
-					onClick={onCancel}
+					onClick={onClose}
 					className="absolute top-4 right-4"
 				>
 					{t('closeIcon')}
