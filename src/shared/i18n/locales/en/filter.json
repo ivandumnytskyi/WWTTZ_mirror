@@ -1,1 +1,10 @@
-{}
+{
+	"openFilterModal": "Open Filter Modal",
+	"filterApplied": "Filter applied successfully",
+	"title": "Filter",
+	"loading": "Loading...",
+	"apply": "Apply",
+	"clearAll": "Clear all parameters",
+	"close": "Close",
+	"closeIcon": "X"
+}
