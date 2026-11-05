@@ -3,21 +3,22 @@ import { useTranslation } from 'react-i18next'
 
 import { FilterChoose } from '@/shared/api/types/Filter/FilterVariants'
 
+import Conformation from './Conformation'
+
 const FilterModal = ({
 	onClose,
 	data,
-	isLoading,
-	setIsOpenConfirmation
+	isLoading
 }: {
 	onClose: () => void
 	data: FilterChoose[] | undefined
 	isLoading: boolean
-	setIsOpenConfirmation: (value: boolean) => void
 }) => {
 	const { t } = useTranslation('filter')
 	const [selectedOptions, setSelectedOptions] = useState<{
 		[key: string]: boolean
 	}>({})
+	const [isOpenConfirmation, setIsOpenConfirmation] = useState(false)
 
 	const handleCheckboxChange = (optionId: string) => {
 		setSelectedOptions(prev => ({
@@ -28,18 +29,16 @@ const FilterModal = ({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
-		onClose()
 		setIsOpenConfirmation(true)
 		console.log(selectedOptions)
 	}
-
 	return (
 		<>
 			<div
 				className="modal-backdrop bg-[rgba(27,27,27,0.3)] backdrop-blur-sm fixed inset-0"
 				onClick={() => onClose()}
 			></div>
-			<div className="modal-content absolute z-20 w-[1280px] bg-white h-max inset-0 flex flex-col top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center justify-center p-2">
+			<div className="modal-content absolute z-20 w-[1280px] rounded-2xl bg-white h-max inset-0 flex flex-col top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center justify-center p-2">
 				<h1 className="border-b border-[rgba(180,180,180,1)] w-[1214px] text-[40px] text-center font-medium">
 					{t('title')}
 				</h1>
@@ -101,6 +100,12 @@ const FilterModal = ({
 				>
 					{t('clearAll')}
 				</button>
+				{isOpenConfirmation && (
+					<Conformation
+						message={t('conformationMessage')}
+						onClose={() => setIsOpenConfirmation(false)}
+					/>
+				)}
 			</div>
 		</>
 	)
