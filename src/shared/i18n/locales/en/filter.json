@@ -1,1 +1,11 @@
-{}
+{
+	"openFilterModal": "Open Filter Modal",
+	"conformationMessage": "Do you want to apply new filter",
+	"title": "Filter",
+	"loading": "Loading...",
+	"apply": "Apply",
+	"clearAll": "Clear all parameters",
+	"confirmApply": "Apply new filters",
+	"confirmClose": "Use old filters",
+	"closeIcon": "X"
+}
